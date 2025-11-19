@@ -1,15 +1,16 @@
 {
   "manifest_version": 3,
-  "name": "Model Card Scoring",
+  "name": "HF Model Card Grader",
   "version": "1.0.0",
-  "description": "Scores hugging face model cards",
+  "description": "Grades Hugging Face model card pages using a local OpenAI-powered backend.",
   "permissions": [],
   "host_permissions": [
-    "<all_urls>"
+    "https://huggingface.co/*",
+    "http://localhost:8000/*"
   ],
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
+      "matches": ["https://huggingface.co/*"],
       "js": ["content.js"],
       "run_at": "document_idle"
     }
