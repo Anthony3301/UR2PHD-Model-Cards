@@ -3,7 +3,7 @@
 Generate a filled card evaluation from a URL using OpenAI's API.
 
 Usage:
-  python src/generate_card_review.py \
+  python src/generate_eval.py \
       --url https://huggingface.co/meta-llama/Meta-Llama-3-8B-Instruct \
       --template templates/card_review_template.md \
       --outdir evaluations \
@@ -21,6 +21,9 @@ import argparse
 import pathlib
 import textwrap
 from typing import Optional
+
+from dotenv import load_dotenv, find_dotenv
+load_dotenv(find_dotenv(), override=False)  
 
 
 try:

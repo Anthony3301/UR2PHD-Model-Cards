@@ -1,0 +1,17 @@
+{
+  "manifest_version": 3,
+  "name": "Model Card Scoring",
+  "version": "1.0.0",
+  "description": "Scores hugging face model cards",
+  "permissions": [],
+  "host_permissions": [
+    "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["<all_urls>"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ]
+}
