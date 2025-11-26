@@ -9,8 +9,8 @@ Evaluate Hugging Face model cards directly in your browser and receive a structu
 * Floating evaluator widget:
 
 Click to open full audit panel.
-GPT runs at temperature = 0 for deterministic output (minimal hallucination)
-Backend provides both structured JSON and full Markdown audit
+GPT runs at temperature = 0 for deterministic output (minimal hallucination). 
+Backend provides both structured JSON and full Markdown audit.
 
 ## Installation & Setup
 1. Clone the repository
