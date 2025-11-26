@@ -13,10 +13,13 @@ GPT runs at temperature = 0 for deterministic output (minimal hallucination).
 Backend provides both structured JSON and full Markdown audit.
 
 ## Installation & Setup
-1. Clone the repository: 
+
+1. Clone the repository:
+
 `git clone <insert URL>`
 
-2. Create .env file
+3. Create .env file
+
 Create a file named .env in the same directory as server.py:
 ```
 OPENAI_API_KEY=<your_openai_key_here>
@@ -24,12 +27,15 @@ OPENAI_MODEL=gpt-4o
 ```
 
 3. Install backend dependencies
+
 `pip install fastapi uvicorn python-dotenv openai requests beautifulsoup4` (or pip3 install ...)
 
-4. Start the backend
+5. Start the backend
+   
 `python server.py` (or python3 server.py)
 
-5. Installing the Chrome Extension
+7. Installing the Chrome Extension
+
 Open Chrome → Extensions
 Enable Developer Mode
 Click Load unpacked
@@ -38,6 +44,7 @@ Visit any Hugging Face model card page
 The floating “Evaluate Model Card” button will appear in the bottom-right corner.
 
 ## Usage
+
 Open a Hugging Face model card page
 Click “Evaluate Model Card”
 Wait for the spinner to finish
