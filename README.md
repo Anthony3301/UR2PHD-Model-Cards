@@ -50,10 +50,14 @@ The floating “Evaluate Model Card” button will appear in the bottom-right co
 
 ## Usage
 
-Open a Hugging Face model card page
-Click “Evaluate Model Card”
-Wait for the spinner to finish
-Once grading completes, the button glows
-Click again to view the full audit panel
+1. Open a Hugging Face model card page
+
+2. Click “Evaluate Model Card”
+
+3. Wait for the spinner to finish
+
+4. Once grading completes, the button glows
+
+5. Click again to view the full audit panel
 
 
