@@ -36,11 +36,16 @@ OPENAI_MODEL=gpt-4o
 
 7. Installing the Chrome Extension
 
-Open Chrome → Extensions
-Enable Developer Mode
-Click Load unpacked
-Select the chrome-plugin/ folder
-Visit any Hugging Face model card page
+a) Open Chrome → Extensions
+
+b) Enable Developer Mode
+
+c) Click Load unpacked
+
+d) Select the chrome-plugin/ folder
+
+e) Visit any Hugging Face model card page
+
 The floating “Evaluate Model Card” button will appear in the bottom-right corner.
 
 ## Usage
