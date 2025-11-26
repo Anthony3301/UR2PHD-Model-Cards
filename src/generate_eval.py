@@ -68,8 +68,14 @@ def fetch_url_text(url: str) -> str:
         text = soup.get_text(separator="\n")
         text = "\n".join(line.strip() for line in text.splitlines() if line.strip())
 
-    if len(text) > MAX_INPUT_CHARS:
-        text = text[:MAX_INPUT_CHARS] + "\n...[truncated]..."
+        if len(text) > MAX_INPUT_CHARS:
+            text = text[:MAX_INPUT_CHARS] + "\n...[truncated]..."
+
+    # focus on the model card section if possible
+    text = focus_on_model_card(text)
+
+    return text
+
 
     return text
 
@@ -94,14 +100,25 @@ def sanitize_filename(s: str) -> str:
 
 def build_prompt(template_md: str, url: str, page_text: str) -> dict:
     system = (
-        "You are an expert AI transparency reviewer. "
-        "Fill the provided Markdown template EXACTLY AS-IS: "
-        "do not add, remove, or rename any sections or headings; "
-        "only insert content where there are blanks. "
-        "Do not include any prose outside the template. "
-        "If a field is unknown from the provided content, leave it blank or write a short 'N/A' note. "
-        "Keep links as Markdown links when possible."
+        "You are an AI transparency reviewer evaluating model cards on Hugging Face.\n"
+        "You MUST obey all of the following rules:\n"
+        "1. Fill the provided Markdown template EXACTLY AS-IS.\n"
+        "   - Do not add, remove, or rename any sections, headings, or tables.\n"
+        "   - Keep the same ordering and formatting of headings and table columns.\n"
+        "2. You may ONLY use information that comes from the provided PAGE TEXT or the URL.\n"
+        "   - Do NOT use outside knowledge, training data, or assumptions.\n"
+        "   - If something is not clearly supported by PAGE TEXT, treat it as unknown.\n"
+        "3. If a field is unknown or not specified in PAGE TEXT:\n"
+        "   - Leave it blank, or write a very short note like 'N/A – not specified in model card text'.\n"
+        "   - Do NOT guess, infer, or hallucinate plausible details.\n"
+        "4. For the scoring table:\n"
+        "   - Each category score MUST be an integer 0, 1, 2, or 3.\n"
+        "   - The 'Total (/30)' MUST equal the sum of all category scores.\n"
+        "5. For the standards comparison table:\n"
+        "   - Use only '✓', '~', or '✗' as statuses.\n"
+        "6. Do not output anything outside the template boundaries."
     )
+
     user = textwrap.dedent(f"""
     TEMPLATE (fill exactly, keep headings/format identical):
     ---
@@ -111,9 +128,11 @@ def build_prompt(template_md: str, url: str, page_text: str) -> dict:
     CONTEXT (URL + scraped text):
     URL: {url}
 
+    IMPORTANT: All facts MUST be supported by the PAGE TEXT below.
+    If unsure, leave fields blank or mark them as 'N/A – not specified in model card text'.
+
     PAGE TEXT (possibly truncated):
-    """
-    ) + page_text
+    """) + page_text
 
     return {"system": system, "user": user}
 
@@ -124,19 +143,21 @@ def call_openai_with_fallback(
     last_err: Optional[Exception] = None
     for attempt in range(retries):
         try:
+            # Primary path: Responses API
             resp = client.responses.create(
                 model=model,
                 instructions=system,
                 input=user,
-                temperature=0.2,
+                temperature=0.0,  # fully deterministic
             )
             return resp.output_text
         except Exception as e:
             last_err = e
+            # Fallback: Chat Completions
             try:
                 chat = client.chat.completions.create(
                     model=model,
-                    temperature=0.2,
+                    temperature=0.0,
                     messages=[
                         {"role": "system", "content": system},
                         {"role": "user", "content": user},
@@ -147,9 +168,8 @@ def call_openai_with_fallback(
                 last_err = e2
                 time.sleep(1.5 * (attempt + 1))
                 continue
-            
-    raise RuntimeError(f"OpenAI call failed after {retries} attempts: {last_err}")
 
+    raise RuntimeError(f"OpenAI call failed after {retries} attempts: {last_err}")
 
 def write_output(outdir: str, url: str, md_text: str) -> str:
     pathlib.Path(outdir).mkdir(parents=True, exist_ok=True)
@@ -158,6 +178,27 @@ def write_output(outdir: str, url: str, md_text: str) -> str:
     outpath.write_text(md_text, encoding="utf-8")
     return str(outpath)
 
+def focus_on_model_card(text: str) -> str:
+    """
+    Try to focus the context on the 'Model card' section of a Hugging Face page.
+    If we don't find such a marker, return the original text.
+    """
+    lowered = text.lower()
+    markers = ["model card", "modelcard", "model description"]  # tweak as needed
+
+    idx = -1
+    for marker in markers:
+        idx = lowered.find(marker)
+        if idx != -1:
+            break
+
+    if idx == -1:
+        return text  # fallback: can't find a clear marker
+
+    # Keep some context before and after the marker
+    start = max(0, idx - 3000)
+    end = min(len(text), idx + 50_000)
+    return text[start:end]
 
 def main():
     parser = argparse.ArgumentParser(description="Fill AI card template from a URL.")
