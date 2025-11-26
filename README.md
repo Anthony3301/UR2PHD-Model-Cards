@@ -13,7 +13,7 @@ GPT runs at temperature = 0 for deterministic output (minimal hallucination).
 Backend provides both structured JSON and full Markdown audit.
 
 ## Installation & Setup
-1. Clone the repository
+1. Clone the repository: 
 `git clone <insert URL>`
 
 2. Create .env file
