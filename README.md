@@ -14,18 +14,20 @@ Backend provides both structured JSON and full Markdown audit.
 
 ## Installation & Setup
 1. Clone the repository
-git clone <insert URL>
+`git clone <insert URL>`
 
 2. Create .env file
 Create a file named .env in the same directory as server.py:
+```
 OPENAI_API_KEY=<your_openai_key_here>
 OPENAI_MODEL=gpt-4o
+```
 
 3. Install backend dependencies
-pip install fastapi uvicorn python-dotenv openai requests beautifulsoup4 (or pip3 install ...)
+`pip install fastapi uvicorn python-dotenv openai requests beautifulsoup4` (or pip3 install ...)
 
 4. Start the backend
-python server.py (or python3 server.py)
+`python server.py` (or python3 server.py)
 
 5. Installing the Chrome Extension
 Open Chrome → Extensions
