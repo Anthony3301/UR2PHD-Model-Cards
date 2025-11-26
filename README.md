@@ -14,8 +14,7 @@ Backend provides both structured JSON and full Markdown audit.
 
 ## Installation & Setup
 1. Clone the repository
-git clone https://github.com/<your-org>/<repo-name>.git
-cd <repo-name>
+git clone <insert URL>
 
 2. Create .env file
 Create a file named .env in the same directory as server.py:
