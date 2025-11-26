@@ -72,7 +72,7 @@ def fetch_url_text(url: str) -> str:
             text = text[:MAX_INPUT_CHARS] + "\n...[truncated]..."
 
     # focus on the model card section if possible
-    text = focus_on_model_card(text)
+    # text = focus_on_model_card(text)
 
     return text
 
