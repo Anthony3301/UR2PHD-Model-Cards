@@ -1,8 +1,8 @@
-### Model Card Auditor – Chrome Extension 
+# Model Card Auditor – Chrome Extension 
 
 Evaluate Hugging Face model cards directly in your browser and receive a structured audit powered by GPT. This plugin analyzes documentation completeness, standards coverage, governance rigor, reproducibility, risk transparency, and more.
 
-# Features
+## Features
 
 * Click-to-evaluate model card (does not auto-trigger)
 * Detailed audit panel
@@ -12,7 +12,7 @@ Click to open full audit panel.
 GPT runs at temperature = 0 for deterministic output (minimal hallucination)
 Backend provides both structured JSON and full Markdown audit
 
-# Installation & Setup
+## Installation & Setup
 1. Clone the repository
 git clone https://github.com/<your-org>/<repo-name>.git
 cd <repo-name>
@@ -36,8 +36,7 @@ Select the chrome-plugin/ folder
 Visit any Hugging Face model card page
 The floating “Evaluate Model Card” button will appear in the bottom-right corner.
 
-6. Usage
-
+## Usage
 Open a Hugging Face model card page
 Click “Evaluate Model Card”
 Wait for the spinner to finish
