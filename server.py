@@ -384,6 +384,14 @@ def grade(req: GradeRequest):
         filled_md = run_card_evaluation(req.url)
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Failed to evaluate model card: {e}")
+    
+    # Force Type to "Model Card" before parsing for now
+    # extension only for model cards atm
+    filled_md = re.sub(
+        r"- \*\*Type:\*\*.*",             
+        "- **Type:** Model Card",            
+        filled_md
+    )
 
     # Parse structured info
     basic_info = parse_basic_info(filled_md)

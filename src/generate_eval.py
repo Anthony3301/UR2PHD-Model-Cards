@@ -77,9 +77,6 @@ def fetch_url_text(url: str) -> str:
     return text
 
 
-    return text
-
-
 def load_template(path: str) -> str:
     p = pathlib.Path(path)
     if not p.exists():
